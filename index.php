@@ -30,3 +30,5 @@ $conn->close();
 
 header("Location: login.php");
 ?>
+
+<!-- omgggg -->
