@@ -30,7 +30,7 @@ abstract class Registrst{
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "esempiodb";
+$dbname = "utente";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

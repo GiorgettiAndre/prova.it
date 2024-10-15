@@ -5,13 +5,7 @@ abstract class Loginst {
     const WrongPWD = 2;
 }
 
-// Connessione al database (esempio)
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "esempiodb";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+include "index.php";
 
 // Verifica se la connessione ha avuto successo
 if ($conn->connect_error) {
@@ -26,15 +20,15 @@ if (!(isset($_POST['username']) && isset($_POST['password'])))
 else {
     // Prendi username e password dal form di login
     $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+    $pw = trim($_POST['password']);
 
-    $codedpwd = hash('sha256', $password);
+    $codedpw = hash('sha256', $pw);
     // Query per verificare se le credenziali sono corrette
-    $result = $conn->query("SELECT * FROM esempioTB WHERE usern='$username' AND pwd='$codedpwd'");
+    $result = $conn->query("SELECT * FROM utente WHERE username='$username' AND pw='$codedpw'");
     if ($result->num_rows > 0)
         $login = Loginst::Success; // Login riuscito
     else {
-        $result = $conn->query("SELECT * FROM esempioTB WHERE usern='$username'");
+        $result = $conn->query("SELECT * FROM utente WHERE username='$username'");
         if ($result->num_rows > 0)
             $login = Loginst::WrongPWD;
     }
