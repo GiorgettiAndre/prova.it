@@ -5,12 +5,7 @@ abstract class Loginst {
     const WrongPWD = 2;
 }
 
-include "index.php";
-
-// Verifica se la connessione ha avuto successo
-if ($conn->connect_error) {
-    die("Connessione fallita: " . $conn->connect_error);
-}
+require "index.php";
 
 $justdone = true;
 $login = Loginst::Failed;
@@ -33,8 +28,6 @@ else {
             $login = Loginst::WrongPWD;
     }
 }
-
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -131,6 +124,8 @@ $conn->close();
         if ($justdone) {
             switch($login) {
                 case Loginst::Success:
+                    $email = $conn->query("SELECT email FROM utente WHERE username='$username' AND pw='$codedpw'")->fetch_assoc()["email"];
+                    $conn->query("INSERT INTO accesso (username_utente, email_utente) VALUES('$username', '$email'); ");
                     echo "<h2>Sei entrato con successo!</h2>";
                     break;
 

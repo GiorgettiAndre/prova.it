@@ -26,18 +26,7 @@ abstract class Registrst{
     const Success = 1;
 }
 
-// Connessione al database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "utente";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verifica della connessione
-if ($conn->connect_error) {
-    die("Connessione al database fallita: " . $conn->connect_error);
-}
+require "index.php";
 
 $alreadyreg = true;
 $registr = Registrst::Success;
@@ -51,11 +40,11 @@ else
     $password = trim($_POST['password']);
     $email = trim($_POST['email']);
 
-    $result = $conn->query("SELECT * FROM esempioTB WHERE usern='$username'");
+    $result = $conn->query("SELECT * FROM utente WHERE username='$username'");
     if ($result->num_rows > 0)
         $registr = Registrst::Userntkn;
 
-    $result = $conn->query("SELECT * FROM esempioTB WHERE email='$email'");
+    $result = $conn->query("SELECT * FROM utente WHERE email='$email'");
     if ($result->num_rows > 0)
     {
         if ($registr == Registrst::Userntkn)
@@ -68,10 +57,11 @@ else
 
     $codedpwd = hash('sha256', $password);
     if ($registr == Registrst::Success)
-        $conn->query("INSERT INTO esempioTB VALUES ('$username' , '$codedpwd' , '$email')");
+    {
+        $conn->query("INSERT INTO utente VALUES ('$username' , '$email' , '$codedpwd')");
+        $conn->query("INSERT INTO accesso (username_utente, email_utente) VALUES('$username', '$email'); ");
+    }
 }
-
-$conn->close();
 ?>
 
 
